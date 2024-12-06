@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shopping-cart-web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shopping-cart-web-app
+  template:
+    metadata:
+      labels:
+        app: shopping-cart-web-app
+    spec:
+      containers:
+      - name: shopping-cart-web-app
+        image: saif1920/nodejs-shopping-cart-web-app:latest
+        ports:
+        - containerPort: 3000
