@@ -38,6 +38,12 @@ pipeline {
             }
         }
 
+        stage('Test Kubernetes Access') {
+            steps {
+                sh 'kubectl get nodes --kubeconfig=$KUBECONFIG'
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
                 script {
