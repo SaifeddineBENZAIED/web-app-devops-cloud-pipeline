@@ -30,12 +30,10 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
-                        docker.image(DOCKER_IMAGE).push()
-                    }
+                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://registry.hub.docker.com']) {
+                    sh 'docker tag saif1920/nodejs-shopping-cart-web-app:latest registry.hub.docker.com/saif1920/nodejs-shopping-cart-web-app:latest'
+                    sh 'docker push registry.hub.docker.com/saif1920/nodejs-shopping-cart-web-app:latest'
                 }
-            }
         }
 
         stage('Test Kubernetes Access') {
