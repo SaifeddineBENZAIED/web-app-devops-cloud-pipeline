@@ -34,6 +34,7 @@ pipeline {
                     sh 'docker tag saif1920/nodejs-shopping-cart-web-app:latest registry.hub.docker.com/saif1920/nodejs-shopping-cart-web-app:latest'
                     sh 'docker push registry.hub.docker.com/saif1920/nodejs-shopping-cart-web-app:latest'
                 }
+            }
         }
 
         stage('Test Kubernetes Access') {
