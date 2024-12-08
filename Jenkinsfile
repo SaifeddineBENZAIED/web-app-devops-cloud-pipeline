@@ -81,7 +81,16 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    docker.image('ansible/ansible').inside {
+                    def ansibleImage = 'ansible/ansible:2.9.27'
+                    // Check if the image exists locally
+                    if (!docker.image(ansibleImage).exists()) {
+                        echo "Ansible image not found locally. Pulling ${ansibleImage} from Docker Hub."
+                        sh "docker pull ${ansibleImage}"
+                    } else {
+                        echo "Ansible image ${ansibleImage} already exists locally."
+                    }
+                    // Use the image to run the Ansible tasks
+                    docker.image(ansibleImage).inside {
                         sh '''
                         ansible --version
                         ansible-playbook -i inventory.yml playbook.yml
@@ -90,7 +99,6 @@ pipeline {
                 }
             }
         }
-
         stage('Monitor Application with Prometheus') {
             steps {
                 echo 'Monitoring application with Prometheus...'
