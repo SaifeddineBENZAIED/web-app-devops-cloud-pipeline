@@ -81,7 +81,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    def ansibleImage = 'ansible/ansible:2.9.27'
+                    def ansibleImage = 'ansible/ansible'
                     // Check if the image exists locally
                     if (!docker.image(ansibleImage).exists()) {
                         echo "Ansible image not found locally. Pulling ${ansibleImage} from Docker Hub."
