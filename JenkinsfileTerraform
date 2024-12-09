@@ -6,6 +6,8 @@ pipeline {
         AZURE_CLIENT_SECRET   = credentials('azure-client-secret')
         AZURE_TENANT_ID       = credentials('azure-tenant-id')
         AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_IMAGE          = 'saif1920/nodejs-shopping-cart-web-app:latest'
     }
 
     stages {
@@ -30,7 +32,9 @@ pipeline {
                     -var "client_id=$AZURE_CLIENT_ID" \
                     -var "client_secret=$AZURE_CLIENT_SECRET" \
                     -var "tenant_id=$AZURE_TENANT_ID" \
-                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID"
+                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID" \
+                    -var "dockerhub_username=$DOCKERHUB_CREDENTIALS_USR" \
+                    -var "dockerhub_token=$DOCKERHUB_CREDENTIALS_PSW"
                 '''
             }
         }
@@ -42,7 +46,9 @@ pipeline {
                     -var "client_id=$AZURE_CLIENT_ID" \
                     -var "client_secret=$AZURE_CLIENT_SECRET" \
                     -var "tenant_id=$AZURE_TENANT_ID" \
-                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID"
+                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID" \
+                    -var "dockerhub_username=$DOCKERHUB_CREDENTIALS_USR" \
+                    -var "dockerhub_token=$DOCKERHUB_CREDENTIALS_PSW"
                 '''
             }
         }
@@ -50,7 +56,7 @@ pipeline {
 
     post {
         success {
-            echo "Infrastructure deployed successfully!"
+            echo "Application deployed successfully using Docker image: $DOCKER_IMAGE"
         }
         failure {
             echo "Pipeline failed!"
