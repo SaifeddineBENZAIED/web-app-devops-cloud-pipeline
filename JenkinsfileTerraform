@@ -32,9 +32,7 @@ pipeline {
                     -var "client_id=$AZURE_CLIENT_ID" \
                     -var "client_secret=$AZURE_CLIENT_SECRET" \
                     -var "tenant_id=$AZURE_TENANT_ID" \
-                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID" \
-                    -var "dockerhub_username=$DOCKERHUB_CREDENTIALS_USR" \
-                    -var "dockerhub_token=$DOCKERHUB_CREDENTIALS_PSW"
+                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID"
                 '''
             }
         }
@@ -46,10 +44,24 @@ pipeline {
                     -var "client_id=$AZURE_CLIENT_ID" \
                     -var "client_secret=$AZURE_CLIENT_SECRET" \
                     -var "tenant_id=$AZURE_TENANT_ID" \
-                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID" \
-                    -var "dockerhub_username=$DOCKERHUB_CREDENTIALS_USR" \
-                    -var "dockerhub_token=$DOCKERHUB_CREDENTIALS_PSW"
+                    -var "subscription_id=$AZURE_SUBSCRIPTION_ID"
                 '''
+            }
+        }
+
+        stage('Deploy Docker Image') {
+            steps {
+                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: 'https://registry.hub.docker.com']) {
+                    sh '''
+                    az webapp config container set \
+                        --name jenkins-tp-app \
+                        --resource-group jenkins_tp_rg \
+                        --docker-custom-image-name $DOCKER_IMAGE \
+                        --docker-registry-server-url https://index.docker.io \
+                        --docker-registry-server-user $DOCKERHUB_CREDENTIALS_USR \
+                        --docker-registry-server-password $DOCKERHUB_CREDENTIALS_PSW
+                    '''
+                }
             }
         }
     }
