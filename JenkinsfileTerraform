@@ -99,7 +99,7 @@ pipeline {
         stage('Monitoring Check') {
             steps {
                 script {
-                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://prometheus:9090", returnStdout: true).trim()
+                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://prometheus:9090/metrics", returnStdout: true).trim()
                     if (response != '200') {
                         error("Monitoring setup failed. Prometheus is not accessible.")
                     } else {
