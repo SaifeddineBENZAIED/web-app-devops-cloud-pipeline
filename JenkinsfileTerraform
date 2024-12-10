@@ -70,14 +70,27 @@ pipeline {
             }
         }
 
-        stage('Configure Monitoring with Prometheus') {
+        stage('Start Prometheus Container') {
             steps {
                 script {
-                    sh '''
-                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-                    helm repo update
-                    helm install prometheus prometheus-community/prometheus
-                    '''
+                    def isPrometheusRunning = sh(script: "docker ps | grep prometheus", returnStatus: true)
+                    if (isPrometheusRunning != 0) {
+                        echo "Prometheus is not running. Starting a new Prometheus container."
+                        sh '''
+                        # Ensure Prometheus configuration file exists
+                        mkdir -p /tmp/prometheus
+                        cp prometheus.yml /tmp/prometheus/prometheus.yml
+
+                        # Run Prometheus container
+                        docker run -d \
+                            --name prometheus \
+                            -p 9090:9090 \
+                            -v /tmp/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+                            prom/prometheus
+                        '''
+                    } else {
+                        echo "Prometheus is already running."
+                    }
                 }
             }
         }
@@ -85,11 +98,11 @@ pipeline {
         stage('Monitoring Check') {
             steps {
                 script {
-                    def response = sh(script: "kubectl get pods -l app.kubernetes.io/name=prometheus -o jsonpath='{.items[0].status.phase}'", returnStdout: true).trim()
-                    if (response != 'Running') {
-                        error("Monitoring setup failed. Prometheus pods are not running.")
+                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:9090", returnStdout: true).trim()
+                    if (response != '200') {
+                        error("Monitoring setup failed. Prometheus is not accessible.")
                     } else {
-                        echo "Prometheus is running successfully in the cluster."
+                        echo "Prometheus is running and monitoring the application."
                     }
                 }
             }
