@@ -73,28 +73,25 @@ pipeline {
         stage('Start Prometheus Container') {
             steps {
                 script {
-                    // Vérifie si le conteneur Prometheus existe déjà
-                    def isPrometheusExisting = sh(script: "docker ps -a --filter 'name=prometheus' --format '{{.Names}}' | grep prometheus || true", returnStdout: true).trim()
-                    if (isPrometheusExisting) {
-                        echo "Prometheus container already exists. Removing it..."
-                        sh "docker stop prometheus || true && docker rm prometheus || true"
+                    // Check if Prometheus container is already running
+                    def isPrometheusRunning = sh(script: "docker ps --filter 'name=prometheus' --format '{{.Names}}' | grep prometheus || true", returnStdout: true).trim()
+                    if (isPrometheusRunning) {
+                        echo "Prometheus is already running."
+                    } else {
+                        // Ensure the Prometheus configuration file exists
+                        sh '''
+                        mkdir -p /tmp/prometheus
+                        cp prometheus.yml /tmp/prometheus/prometheus.yml
+                        '''
+                        echo "Starting Prometheus container..."
+                        sh '''
+                        docker run -d \
+                            --name prometheus \
+                            -p 9090:9090 \
+                            -v /tmp/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+                            prom/prometheus
+                        '''
                     }
-        
-                    // Assurez-vous que le fichier de configuration Prometheus existe
-                    sh '''
-                    mkdir -p /tmp/prometheus
-                    cp prometheus.yml /tmp/prometheus/prometheus.yml
-                    '''
-        
-                    // Lance un nouveau conteneur Prometheus
-                    echo "Starting a new Prometheus container..."
-                    sh '''
-                    docker run -d \
-                        --name prometheus \
-                        -p 9090:9090 \
-                        -v /tmp/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
-                        prom/prometheus
-                    '''
                 }
             }
         }
