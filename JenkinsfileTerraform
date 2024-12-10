@@ -69,14 +69,49 @@ pipeline {
                 }
             }
         }
+
+        stage('Setup Prometheus') {
+            steps {
+                script {
+                    // Check if Prometheus is running
+                    def isPrometheusRunning = sh(script: "docker ps | grep prometheus", returnStatus: true)
+                    if (isPrometheusRunning != 0) {
+                        // Run Prometheus if not running
+                        sh '''
+                        docker run -d \
+                            --name prometheus \
+                            -p 9090:9090 \
+                            -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
+                            prom/prometheus
+                        '''
+                        echo "Prometheus started successfully."
+                    } else {
+                        echo "Prometheus is already running."
+                    }
+                }
+            }
+        }
+
+        stage('Monitoring Check') {
+            steps {
+                script {
+                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:9090", returnStdout: true).trim()
+                    if (response != '200') {
+                        error("Monitoring setup failed. Prometheus is not accessible.")
+                    } else {
+                        echo "Prometheus is running and accessible."
+                    }
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo "Application deployed successfully using Docker image: $DOCKER_IMAGE"
+            echo "Application deployed successfully with Prometheus monitoring enabled!"
         }
         failure {
-            echo "Pipeline failed!"
+            echo "Pipeline failed! Check logs for details."
         }
     }
 }
