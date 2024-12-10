@@ -70,24 +70,14 @@ pipeline {
             }
         }
 
-        stage('Setup Prometheus') {
+        stage('Configure Monitoring with Prometheus') {
             steps {
                 script {
-                    // Check if Prometheus is running
-                    def isPrometheusRunning = sh(script: "docker ps | grep prometheus", returnStatus: true)
-                    if (isPrometheusRunning != 0) {
-                        // Run Prometheus if not running
-                        sh '''
-                        docker run -d \
-                            --name prometheus \
-                            -p 9090:9090 \
-                            -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
-                            prom/prometheus
-                        '''
-                        echo "Prometheus started successfully."
-                    } else {
-                        echo "Prometheus is already running."
-                    }
+                    sh '''
+                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                    helm repo update
+                    helm install prometheus prometheus-community/prometheus
+                    '''
                 }
             }
         }
@@ -95,11 +85,11 @@ pipeline {
         stage('Monitoring Check') {
             steps {
                 script {
-                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:9090", returnStdout: true).trim()
-                    if (response != '200') {
-                        error("Monitoring setup failed. Prometheus is not accessible.")
+                    def response = sh(script: "kubectl get pods -l app.kubernetes.io/name=prometheus -o jsonpath='{.items[0].status.phase}'", returnStdout: true).trim()
+                    if (response != 'Running') {
+                        error("Monitoring setup failed. Prometheus pods are not running.")
                     } else {
-                        echo "Prometheus is running and accessible."
+                        echo "Prometheus is running successfully in the cluster."
                     }
                 }
             }
