@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'web_app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['jenkins-tp-app.azurewebsites.net:80']
