@@ -67,23 +67,23 @@ web-app-devops-cloud-pipeline/
    git clone https://github.com/SaifeddineBENZAIED/web-app-devops-cloud-pipeline.git
    cd web-app-devops-cloud-pipeline
 Build the Docker Image:
-```bash
-docker build -t web-app:latest ./app
+   ```bash
+   docker build -t web-app:latest ./app
 
 Run the Docker Container:
-```bash
-docker run -p 3000:3000 web-app:latest
+   ```bash
+   docker run -p 3000:3000 web-app:latest
 
 Deploy to Kubernetes:
    Apply the Kubernetes manifests:
-   ```bash
-   kubectl apply -f kubernetes/deployment.yaml
-   kubectl apply -f kubernetes/service.yaml
+      ```bash
+      kubectl apply -f kubernetes/deployment.yaml
+      kubectl apply -f kubernetes/service.yaml
 
 Set Up Prometheus:
    Deploy Prometheus using the provided configuration:
-   ```bash
-   kubectl apply -f monitoring/prometheus.yml
+      ```bash
+      kubectl apply -f monitoring/prometheus.yml
 
 Run the Jenkins Pipeline:
 Set up a Jenkins job and point it to the Jenkinsfile in this repository.
