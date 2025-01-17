@@ -67,26 +67,28 @@ web-app-devops-cloud-pipeline/
    git clone https://github.com/SaifeddineBENZAIED/web-app-devops-cloud-pipeline.git
    cd web-app-devops-cloud-pipeline
 Build the Docker Image:
-
+```bash
 docker build -t web-app:latest ./app
+
 Run the Docker Container:
-
+```bash
 docker run -p 3000:3000 web-app:latest
+
 Deploy to Kubernetes:
-Apply the Kubernetes manifests:
+   Apply the Kubernetes manifests:
+   ```bash
+   kubectl apply -f kubernetes/deployment.yaml
+   kubectl apply -f kubernetes/service.yaml
 
-kubectl apply -f kubernetes/deployment.yaml
-kubectl apply -f kubernetes/service.yaml
 Set Up Prometheus:
-Deploy Prometheus using the provided configuration:
+   Deploy Prometheus using the provided configuration:
+   ```bash
+   kubectl apply -f monitoring/prometheus.yml
 
-kubectl apply -f monitoring/prometheus.yml
 Run the Jenkins Pipeline:
-
 Set up a Jenkins job and point it to the Jenkinsfile in this repository.
 
 The pipeline will:
-
 Build and push the Docker image.
 
 Deploy the app to Kubernetes.
@@ -98,10 +100,11 @@ Deploy the app to Azure using Terraform.
 Deploy to Azure:
 
 Run the Terraform scripts to provision Azure resources:
-
+```bash
 cd terraform
 terraform init
 terraform apply
+
 🔍 Monitoring and Alerts
 Prometheus: Monitors the application's metrics (e.g., HTTP requests, response times).
 
