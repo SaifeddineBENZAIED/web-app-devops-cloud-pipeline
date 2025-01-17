@@ -69,7 +69,7 @@ web-app-devops-cloud-pipeline/
 Build the Docker Image:
    ```bash
    docker build -t web-app:latest ./app
-   exit
+   ```
 Run the Docker Container:
    ```bash
    docker run -p 3000:3000 web-app:latest
