@@ -38,19 +38,33 @@ web-app-devops-cloud-pipeline/
 │ ├── views/ # EJS templates (if applicable)
 
 │ ├── public/ # Static files (CSS, JS, images)
+
 │ └── Dockerfile # Dockerfile for containerizing the app
+
 ├── kubernetes/ # Kubernetes manifests
+
 │ ├── deployment.yaml # Kubernetes deployment configuration
+
 │ └── service.yaml # Kubernetes service configuration
+
 ├── terraform/ # Terraform files for Azure infrastructure
+
 │ ├── main.tf # Main Terraform configuration
+
 │ └── variables.tf # Terraform variables
+
 ├── jenkins/ # Jenkins pipeline scripts
+
 │ └── Jenkinsfile # Jenkins pipeline configuration
+
 ├── monitoring/ # Prometheus and Alertmanager configurations
+
 │ ├── prometheus.yml # Prometheus configuration
+
 │ └── alertmanager.yml # Alertmanager configuration
+
 ├── README.md # Project documentation
+
 └── .gitignore # Git ignore file
 
 
@@ -93,6 +107,7 @@ Run the Jenkins Pipeline:
 Set up a Jenkins job and point it to the Jenkinsfile in this repository.
 
 The pipeline will:
+
 Build and push the Docker image.
 
 Deploy the app to Kubernetes.
@@ -108,13 +123,15 @@ Run the Terraform scripts to provision Azure resources:
 cd terraform
 terraform init
 terraform apply
-
+```
 🔍 Monitoring and Alerts
+
 Prometheus: Monitors the application's metrics (e.g., HTTP requests, response times).
 
 Alertmanager: Sends alerts based on predefined rules (e.g., high error rates, downtime).
 
 🛠️ Jenkins Pipeline
+
 The Jenkins pipeline automates the following steps:
 
 Checkout: Pulls the latest code from the repository.
@@ -130,6 +147,7 @@ Set Up Monitoring: Configures Prometheus and Alertmanager.
 Deploy to Azure: Uses Terraform to provision Azure resources and deploy the app.
 
 🌐 Azure Deployment
+
 The app is deployed to Azure using Terraform. The pipeline:
 
 Logs in to Azure using service principal credentials.
@@ -139,6 +157,7 @@ Provisions resources (e.g., Azure Web App, Kubernetes cluster).
 Deploys the Docker image to Azure.
 
 📊 Monitoring with Prometheus
+
 Prometheus is used to monitor the application's performance and health. Metrics include:
 
 HTTP request counts
