@@ -89,32 +89,37 @@ Build the Docker Image:
    docker build -t web-app:latest ./app
    ```
 Run the Docker Container:
+
    ```bash
    docker run -p 3000:3000 web-app:latest
    ```
 Deploy to Kubernetes:
+
    Apply the Kubernetes manifests:
+
       ```bash
       kubectl apply -f kubernetes/deployment.yaml
       kubectl apply -f kubernetes/service.yaml
       ```
+
 Set Up Prometheus:
    Deploy Prometheus using the provided configuration:
       ```bash
       kubectl apply -f monitoring/prometheus.yml
       ```
+      
 Run the Jenkins Pipeline:
 Set up a Jenkins job and point it to the Jenkinsfile in this repository.
 
 The pipeline will:
 
-   Build and push the Docker image.
+   -Build and push the Docker image.
 
-   Deploy the app to Kubernetes.
+   -Deploy the app to Kubernetes.
 
-   Set up monitoring with Prometheus.
+   -Set up monitoring with Prometheus.
 
-   Deploy the app to Azure using Terraform.
+   -Deploy the app to Azure using Terraform.
 
 Deploy to Azure:
 
@@ -126,45 +131,45 @@ terraform apply
 ```
 🔍 Monitoring and Alerts
 
-   Prometheus: Monitors the application's metrics (e.g., HTTP requests, response times).
+   -Prometheus: Monitors the application's metrics (e.g., HTTP requests, response times).
 
-   Alertmanager: Sends alerts based on predefined rules (e.g., high error rates, downtime).
+   -Alertmanager: Sends alerts based on predefined rules (e.g., high error rates, downtime).
 
 🛠️ Jenkins Pipeline
 
 The Jenkins pipeline automates the following steps:
 
-   Checkout: Pulls the latest code from the repository.
+   -Checkout: Pulls the latest code from the repository.
 
-   Build Docker Image: Builds the Docker image for the app.
+   -Build Docker Image: Builds the Docker image for the app.
 
-   Push Docker Image: Pushes the image to Docker Hub.
+   -Push Docker Image: Pushes the image to Docker Hub.
 
-   Deploy to Kubernetes: Applies Kubernetes manifests to deploy the app.
+   -Deploy to Kubernetes: Applies Kubernetes manifests to deploy the app.
 
-   Set Up Monitoring: Configures Prometheus and Alertmanager.
+   -Set Up Monitoring: Configures Prometheus and Alertmanager.
 
-   Deploy to Azure: Uses Terraform to provision Azure resources and deploy the app.
+   -Deploy to Azure: Uses Terraform to provision Azure resources and deploy the app.
 
 🌐 Azure Deployment
 
 The app is deployed to Azure using Terraform. The pipeline:
 
-   Logs in to Azure using service principal credentials.
+   -Logs in to Azure using service principal credentials.
 
-   Provisions resources (e.g., Azure Web App, Kubernetes cluster).
+   -Provisions resources (e.g., Azure Web App, Kubernetes cluster).
 
-   Deploys the Docker image to Azure.
+   -Deploys the Docker image to Azure.
 
 📊 Monitoring with Prometheus
 
 Prometheus is used to monitor the application's performance and health. Metrics include:
 
-   HTTP request counts
+   -HTTP request counts
 
-   Response times
+   -Response times
 
-   Error rates
+   -Error rates
 
 
 ✨ Let’s build something amazing together! ✨
