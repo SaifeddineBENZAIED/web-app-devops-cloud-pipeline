@@ -97,10 +97,10 @@ Deploy to Kubernetes:
 
    Apply the Kubernetes manifests:
 
-      ```bash
-      kubectl apply -f kubernetes/deployment.yaml
-      kubectl apply -f kubernetes/service.yaml
-      ```
+   ```bash
+   kubectl apply -f kubernetes/deployment.yaml
+   kubectl apply -f kubernetes/service.yaml
+   ```
 
 Set Up Prometheus:
    Deploy Prometheus using the provided configuration:
