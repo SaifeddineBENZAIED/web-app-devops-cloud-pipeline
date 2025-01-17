@@ -30,9 +30,13 @@ This repository contains a **simple web application** built with Node.js, integr
 
 ## 📂 Repository Structure
 web-app-devops-cloud-pipeline/
+
 ├── app/ # Web application code
+
 │ ├── server.js # Node.js server code
+
 │ ├── views/ # EJS templates (if applicable)
+
 │ ├── public/ # Static files (CSS, JS, images)
 │ └── Dockerfile # Dockerfile for containerizing the app
 ├── kubernetes/ # Kubernetes manifests
